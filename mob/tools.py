@@ -16,7 +16,9 @@ import hashlib
 # 公共工具
 class tools(object):
 
-    appkey="moba6b6c6d6"
+    # 需要配置的 APPKEY 需要先设置此数据，怎样获取appkey，请查看http://bbs.mob.com/forum.php?mod=viewthread&tid=8212&extra=page%3D1
+    appkey=""
+    # 需要配置APPKEY对应秘钥，需要填写
     appSecret=""
     http_status_200=200
     http_status_400=400
