@@ -50,7 +50,7 @@ class push():
         content = pushwork['content']
         if content is None:
             return {'status':-1,'error':'content is null'} 
-        path = '%s%s' % (self.pushUrl , "/push")
+        path = '%s%s' % (self.pushUrl , "/v2/push")
         result=tools().web_post(path,pushwork)
         return result
     
