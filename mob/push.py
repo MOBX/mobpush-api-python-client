@@ -103,7 +103,8 @@ class push():
                 panel['city'] = city
         elif target == 6:
             if block.strip() == '':   
-                panel['block'] = block               
+                panel['block'] = block     
+		panel['target'] = target				
         return panel   
         
     # 设置Android信息
