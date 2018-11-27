@@ -9,7 +9,7 @@
 @note: 设备相关接口实现： 别名查询、别名设置、别名清除、标签查询、标签新增、标签删除、标签清除
 '''
 
-from tools import tools
+from mob import tools
 import json
 
 class device:

@@ -9,7 +9,7 @@
 @note: 获取地理位置列表信息
 '''
 
-from tools import tools
+from mob import tools
 import json
 
 class area():

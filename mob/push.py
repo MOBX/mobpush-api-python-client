@@ -9,83 +9,87 @@
 @note: 发送推送、查询推送详情
 '''
 
-from tools import tools
+from mob.tools import tools
 import json
 
+
 class push():
-    
-    pushUrl = "http://api.push.mob.com" 
-    
+    pushUrl = "http://api.push.mob.com"
+
     # 推送详情（根据workno查询）
     def getPushByWorkno(self, workno):
         if workno.strip() == '':
-            return {'status':-1,'error':'workno is null'}
-        path = '%s%s%s' % (self.pushUrl , "/push/workno/" , workno)
-        result=tools().web_get(path,'')
+            return {'status': -1, 'error': 'workno is null'}
+        path = '%s%s%s' % (self.pushUrl, "/push/workno/", workno)
+        result = tools().web_get(path, '')
         return result
-    
+
     # 推送详情（根据batchId查询）
     def getPushByBatchId(self, batchId):
         if batchId.strip() == '':
-            return {'status':-1,'error':'batchId is null'}
-        path = '%s%s%s' % (self.pushUrl , "/push/id/" , batchId)
-        result=tools().web_get(path,'')
+            return {'status': -1, 'error': 'batchId is null'}
+        path = '%s%s%s' % (self.pushUrl, "/push/id/", batchId)
+        result = tools().web_get(path, '')
         return result
-    
-    
+
     # 发送推送
-    def sendPush(self,pushwork):
-        print('')
+    def sendPush(self, pushwork):
         if pushwork is None:
-            return {'status':-1,'error':'pushwork is null'}
+            return {'status': -1, 'error': 'pushwork is null'}
         appkey = pushwork['appkey']
         if appkey is None or appkey.strip() == '':
-            return {'status':-1,'error':'appkey is null'}
+            return {'status': -1, 'error': 'appkey is null'}
         target = pushwork['target']
         if target is None:
-            return {'status':-1,'error':'target is null'}
+            return {'status': -1, 'error': 'target is null'}
         type = pushwork['type']
         if type is None:
-            return {'status':-1,'error':'type is null'} 
+            return {'status': -1, 'error': 'type is null'}
         content = pushwork['content']
         if content is None:
-            return {'status':-1,'error':'content is null'} 
-        path = '%s%s' % (self.pushUrl , "/v2/push")
-        result=tools().web_post(path,pushwork)
+            return {'status': -1, 'error': 'content is null'}
+        path = '%s%s' % (self.pushUrl, "/v2/push")
+        result = tools().web_post(path, pushwork)
         return result
-    
-      
+
     # push消息初始化
     # type = 1 通知， type = 2 自定义
     # plats 数组格式，包含 android 和 iOS 为 [1,2]
-    def initPush(self, appkey, workno = None, plats = [1,2], content = None, push_type = 1):
+    def initPush(self, appkey, workno=None, plats=[1, 2], content=None, push_type=1):
         panel = {}
         if appkey is not None:
             panel['appkey'] = appkey
         if workno is not None:
-            panel['workno'] = workno    
+            panel['workno'] = workno
         if plats is not None:
             panel['plats'] = plats
         if content is not None:
-            panel['content'] = content    
+            panel['content'] = content
         if push_type is not None:
             panel['type'] = push_type
         return panel
-        
-    # 设置扩展信息    
-    def buildExtra(self, unlineTime = 1, extras = None, iosProduction = 1):
-        panel = {} 
+
+    # 设置扩展信息
+    # scheme是一个url,data是url跳转时的json格式参数
+    def buildExtra(self, unlineTime=1, extras=None, iosProduction=1, scheme=None,
+                   data=None):
+        panel = {}
         if extras is not None:
-            panel['extras'] = extras     
+            panel['extras'] = extras
+        if scheme is not None:
+            panel['scheme'] = scheme
+        if data is not None:
+            panel['data'] = data
         return panel
-         
+
     # 设置推送范围 
     # target:推送范围:1广播；2别名；3标签；4regid；5地理位置;6用户分群
     # tags 、alias 、     registrationIds是数组方式
-    def buildTarget(self, target = 1, tags = None, alias = None, registrationIds = None, city = None, block = None):
+    # schame是一个url,data是url跳转时的json格式参数
+    def buildTarget(self, target=1, tags=None, alias=None, registrationIds=None, city=None, block=None):
         panel = {}
         if target is None:
-            return panel 
+            return panel
         panel['target'] = target
         if target == 1:
             return panel
@@ -99,19 +103,20 @@ class push():
             if registrationIds is not None:
                 panel['registrationIds'] = registrationIds
         elif target == 5:
-            if city.strip() == '':   
+            if city.strip() is not None:
                 panel['city'] = city
         elif target == 6:
-            if block.strip() == '':   
-                panel['block'] = block     
-		panel['target'] = target				
-        return panel   
-        
-    # 设置Android信息
-    # androidTitle : 0(普通通知)，1(大段文字内容)，2(大图模式),3(横幅通知) 
+            if block.strip() is not None:
+                panel['block'] = block
+        panel['target'] = target
+        return panel
+
+        # 设置Android信息
+
+    # androidTitle : 0(普通通知)，1(大段文字内容)，2(大图模式),3(横幅通知)
     # androidContent 样式具体内容： 0、默认通知无； 1、长内容则为内容数据； 2、大图则为图片地址； 3、横幅则为多行内容
-    def buildAndroid(self, androidTitle = None, androidstyle = None, androidContent = None,
-                     androidVoice = None, androidShake = None, androidLight = None):
+    def buildAndroid(self, androidTitle=None, androidstyle=None, androidContent=None,
+                     androidVoice=None, androidShake=None, androidLight=None):
         panel = {}
         if androidTitle is not None:
             panel['androidTitle'] = androidTitle
@@ -124,12 +129,12 @@ class push():
         if androidShake is not None:
             panel['androidShake'] = androidShake
         if androidLight is not None:
-            panel['androidLight'] = androidLight 
+            panel['androidLight'] = androidLight
         return panel
 
     # 设置IOS信息
-    def bulidIos(self, iosTitle = None, iosSubtitle = None, iosSound = 'default', iosBadge = 1, iosCategory = None,
-             iosSlientPush = None, iosContentAvailable = None, iosMutableContent = None):
+    def bulidIos(self, iosTitle=None, iosSubtitle=None, iosSound='default', iosBadge=1, iosCategory=None,
+                 iosSlientPush=None, iosContentAvailable=None, iosMutableContent=None):
         panel = {}
         if iosTitle is not None:
             panel['iosTitle'] = iosTitle
@@ -146,8 +151,5 @@ class push():
         if iosContentAvailable is not None:
             panel['iosContentAvailable'] = iosContentAvailable
         if iosMutableContent is not None:
-            panel['iosMutableContent'] = iosMutableContent  
+            panel['iosMutableContent'] = iosMutableContent
         return panel
-        
- 
- 
