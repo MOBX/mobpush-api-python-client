@@ -9,16 +9,16 @@
 @note: 获取地理位置列表信息
 '''
 
-from mob import tools
 import json
 
+from mob.tools import tools
+
+
 class area():
-    
-    baseUrl = "http://api.push.mob.com" 
-    
+    baseUrl = "http://api.push.mob.com"
+
     # 获取地理位置列表 -- 子级列表
-    def getArea(self, parentId = '0'): 
-        path = '%s%s%s' % (self.baseUrl , "/area/" , parentId)
-        result=tools().web_get(path,'')
+    def getArea(self, parentId='0'):
+        path = '%s%s%s' % (self.baseUrl, "/area/", parentId)
+        result = tools().web_get(path, '')
         return result
-     

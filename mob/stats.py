@@ -9,26 +9,26 @@
 @note: 推送统计信息
 '''
 
-from mob import tools
 import json
 
+from mob.tools import tools
+
+
 class stats():
-    
-    statsUrl = "http://api.push.mob.com" 
-    
+    statsUrl = "http://api.push.mob.com"
+
     # 获取统计数据(根据workno查询)
     def getStatsByWorkno(self, workno):
         if workno.strip() == '':
-            return {'status':-1,'error':'workno is null'}
-        path = '%s%s%s' % (self.statsUrl , "/stats/workno/" , workno)
-        result=tools().web_get(path,'')
+            return {'status': -1, 'error': 'workno is null'}
+        path = '%s%s%s' % (self.statsUrl, "/stats/workno/", workno)
+        result = tools().web_get(path, '')
         return result
-    
+
     #  获取统计数据(根据batchId查询) 
     def getStatsByBatchId(self, batchId):
         if batchId.strip() == '':
-            return {'status':-1,'error':'batchId is null'}
-        path = '%s%s%s' % (self.statsUrl , "/stats/id/" , batchId)
-        result=tools().web_get(path,'')
+            return {'status': -1, 'error': 'batchId is null'}
+        path = '%s%s%s' % (self.statsUrl, "/stats/id/", batchId)
+        result = tools().web_get(path, '')
         return result
-    
